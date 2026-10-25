@@ -26,6 +26,7 @@ Plik `woocommerce-ai-label.php` (do pobrania jako `ai-content-label.php`) można
 - W liście sklepu badge ma tekst "AI", na stronie produktu pełny.
 
 ## Wersje
+- **1.2**: zapis i odczyt meta przez obiekt produktu WooCommerce (`update_meta_data`/`get_meta`), wspólna funkcja `ai_content_label_get()` zamiast powtórzonego kodu, ochrona przed podwójnym załadowaniem, `wp_json_encode` w skrypcie, usuwanie pustej meta.
 - **1.1**: guard `instanceof WC_Product`, `get_queried_object_id()` w `wp_footer`, własny text domain `ai-content-label`.
 - **1.0**: wersja opublikowana.
 

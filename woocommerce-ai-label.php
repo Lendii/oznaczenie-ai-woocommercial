@@ -2,10 +2,27 @@
 /**
  * Plugin Name: AI Content Label dla WooCommerce
  * Description: Oznacza produkty jako "AI generated" / "AI modified" zgodnie z Art. 50 AI Act.
- * Version: 1.1
+ * Version: 1.2
+ * Requires PHP: 7.4
+ * Text Domain: ai-content-label
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+// Ochrona przed podwójnym załadowaniem (np. plik w mu-plugins + snippet w WPCode).
+if ( defined( 'AI_CONTENT_LABEL_LOADED' ) ) return;
+define( 'AI_CONTENT_LABEL_LOADED', true );
+
+/**
+ * Zwraca 'ai_generated', 'ai_modified' albo '' (brak oznaczenia).
+ */
+if ( ! function_exists( 'ai_content_label_get' ) ) {
+    function ai_content_label_get( $product ) {
+        if ( ! $product instanceof WC_Product ) return '';
+        $label = $product->get_meta( '_ai_content_label' );
+        return in_array( $label, [ 'ai_generated', 'ai_modified' ], true ) ? $label : '';
+    }
+}
 
 add_action( 'woocommerce_product_options_general_product_data', function () {
     echo '<div class="options_group">';
@@ -24,34 +41,39 @@ add_action( 'woocommerce_product_options_general_product_data', function () {
 } );
 
 add_action( 'woocommerce_process_product_meta', function ( $post_id ) {
+    // Nonce weryfikuje WooCommerce przed wywołaniem tego hooka.
     if ( ! current_user_can( 'edit_post', $post_id ) ) return;
-    $allowed = [ '', 'ai_generated', 'ai_modified' ];
-    $value   = isset( $_POST['_ai_content_label'] ) ? sanitize_text_field( wp_unslash( $_POST['_ai_content_label'] ) ) : '';
-    if ( ! in_array( $value, $allowed, true ) ) return;
-    update_post_meta( $post_id, '_ai_content_label', $value );
+    $product = wc_get_product( $post_id );
+    if ( ! $product ) return;
+    $value = isset( $_POST['_ai_content_label'] ) ? sanitize_text_field( wp_unslash( $_POST['_ai_content_label'] ) ) : '';
+    if ( ! in_array( $value, [ '', 'ai_generated', 'ai_modified' ], true ) ) return;
+    if ( $value === '' ) {
+        $product->delete_meta_data( '_ai_content_label' );
+    } else {
+        $product->update_meta_data( '_ai_content_label', $value );
+    }
+    $product->save_meta_data();
 } );
 
+// Lista sklepu: otwarcie wrappera przed miniaturą (priorytet 9)...
 add_action( 'woocommerce_before_shop_loop_item_title', function () {
     global $product;
-    if ( ! $product instanceof WC_Product ) return;
-    $label = get_post_meta( $product->get_id(), '_ai_content_label', true );
-    if ( ! $label ) return;
+    if ( ! ai_content_label_get( $product ) ) return;
     echo '<span class="ai-image-wrap">';
 }, 9 );
 
+// ...i badge z zamknięciem wrappera po miniaturze (priorytet 11).
 add_action( 'woocommerce_before_shop_loop_item_title', function () {
     global $product;
-    if ( ! $product instanceof WC_Product ) return;
-    $label = get_post_meta( $product->get_id(), '_ai_content_label', true );
-    if ( ! $label ) return;
+    if ( ! ai_content_label_get( $product ) ) return;
     echo '<span class="ai-content-badge ai-content-badge--loop">AI</span></span>';
 }, 11 );
 
+// Strona produktu: badge dokładany do galerii przez JS, bo każdy motyw ma inną strukturę galerii.
 add_action( 'wp_footer', function () {
     if ( ! function_exists( 'is_product' ) || ! is_product() ) return;
-    $product_id = get_queried_object_id();
-    if ( ! $product_id ) return;
-    $label = get_post_meta( $product_id, '_ai_content_label', true );
+    $product = wc_get_product( get_queried_object_id() );
+    $label   = ai_content_label_get( $product );
     if ( ! $label ) return;
     $text = $label === 'ai_generated' ? 'AI GENERATED' : 'AI MODIFIED';
     ?>
@@ -77,7 +99,7 @@ add_action( 'wp_footer', function () {
         gallery.style.position = 'relative';
         var badge = document.createElement('span');
         badge.className = 'ai-content-badge';
-        badge.textContent = '<?php echo esc_js( $text ); ?>';
+        badge.textContent = <?php echo wp_json_encode( $text ); ?>;
         gallery.appendChild(badge);
     });
     </script>
@@ -86,8 +108,7 @@ add_action( 'wp_footer', function () {
 
 add_action( 'woocommerce_single_product_summary', function () {
     global $product;
-    if ( ! $product instanceof WC_Product ) return;
-    $label = get_post_meta( $product->get_id(), '_ai_content_label', true );
+    $label = ai_content_label_get( $product );
     if ( ! $label ) return;
     $desc = $label === 'ai_generated'
         ? __( 'Zdjęcie tego produktu zostało w całości wygenerowane przez sztuczną inteligencję.', 'ai-content-label' )
