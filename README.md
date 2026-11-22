@@ -32,6 +32,7 @@ Plik `woocommerce-ai-label.php` można wgrać na trzy sposoby:
 ## Bezpieczeństwo
 - wartość z formularza przechodzi przez `sanitize_text_field` i listę dozwolonych wartości,
 - zapis wymaga `current_user_can( 'edit_post' )`,
+- nonce, autosave i uprawnienia sprawdza WooCommerce przed hookiem `woocommerce_process_product_meta` (`WC_Admin_Meta_Boxes::save_meta_boxes`, nonce `woocommerce_save_data`), więc wtyczka nie dubluje tej weryfikacji,
 - meta zapisywana przez obiekt produktu WooCommerce (`update_meta_data` + `save_meta_data`),
 - wyjście escapowane (`esc_html`, `wp_json_encode`).
 
@@ -44,6 +45,9 @@ Plik `woocommerce-ai-label.php` można wgrać na trzy sposoby:
 - **1.2**: zapis i odczyt meta przez obiekt produktu WooCommerce, wspólna funkcja `ai_content_label_get()` zamiast powtórzonego kodu, ochrona przed podwójnym załadowaniem, `wp_json_encode` w skrypcie, usuwanie pustej meta.
 - **1.1**: guard `instanceof WC_Product`, `get_queried_object_id()` w `wp_footer`, własny text domain `ai-content-label`.
 - **1.0**: wersja opublikowana.
+
+## Licencja
+GPL-2.0-or-later, jak WordPress. Pełny tekst w pliku [LICENSE](LICENSE).
 
 ## Do zrobienia
 - test na motywach blokowych i Product Collection,

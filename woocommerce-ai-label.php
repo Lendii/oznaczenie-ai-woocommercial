@@ -5,6 +5,8 @@
  * Version: 1.2
  * Requires PHP: 7.4
  * Text Domain: ai-content-label
+ * License: GPL-2.0-or-later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
