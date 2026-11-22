@@ -13,7 +13,8 @@ Strona z instrukcją wdrożenia dla właścicieli sklepów: [Darmowe oznaczenia 
 - badge dopasowuje się do fonta strony, a kolory zmienia się w CSS.
 
 ## W jakich warunkach testowane
-- **Wersja 1.2** sprawdzona ręcznie na sklepie WooCommerce z motywem **Kadence PRO**: po ustawieniu oznaczenia przy produkcie badge wyświetla się na stronie produktu i w liście sklepu.
+- **Środowisko testowe:** WordPress 7.1.5, WooCommerce 11.3.1, PHP 8.3, motyw Kadence PRO.
+- **Wersja 1.2** sprawdzona ręcznie na tym sklepie: po ustawieniu oznaczenia przy produkcie badge wyświetla się na stronie produktu i w liście sklepu.
 - Wcześniejsze wersje zainstalowane i sprawdzone na 4 stronach z Kadence PRO.
 - Logika wtyczki (zapis, walidacja, uprawnienia, wyjście hooków, podwójne załadowanie) ma test na atrapie WordPressa: `php tests/smoke-test.php`. Test nie zastępuje sprawdzenia na prawdziwym sklepie.
 - **Nie testowane:** motywy blokowe (FSE), blok Product Collection, własne szablony produktu w page builderach.
