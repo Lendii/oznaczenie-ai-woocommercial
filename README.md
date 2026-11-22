@@ -1,6 +1,8 @@
 # AI Content Label dla WooCommerce
 
-Darmowa wtyczka do WooCommerce, która oznacza główne zdjęcie produktu jako **AI GENERATED** albo **AI MODIFIED**. Powstała pod kątem Art. 50 AI Act.
+Darmowy snippet do WooCommerce, który oznacza główne zdjęcie produktu jako **AI GENERATED** albo **AI MODIFIED**. Powstał pod kątem Art. 50 AI Act.
+
+To snippet w jednym pliku, bez panelu ustawień: wgrywasz plik i działa. Nagłówek `Plugin Name` pozwala też zainstalować go jako paczkę ZIP.
 
 To jedno z narzędzi wspierających transparentność, nie gwarancja pełnej zgodności z AI Act i nie porada prawna.
 
@@ -16,7 +18,7 @@ Strona z instrukcją wdrożenia dla właścicieli sklepów: [Darmowe oznaczenia 
 - **Środowisko testowe:** WordPress 7.1.5, WooCommerce 11.3.1, PHP 8.3, motyw Kadence PRO.
 - **Wersja 1.2** sprawdzona ręcznie na tym sklepie: po ustawieniu oznaczenia przy produkcie badge wyświetla się na stronie produktu i w liście sklepu.
 - Wcześniejsze wersje zainstalowane i sprawdzone na 4 stronach z Kadence PRO.
-- Logika wtyczki (zapis, walidacja, uprawnienia, wyjście hooków, podwójne załadowanie) ma test na atrapie WordPressa: `php tests/smoke-test.php`. Test nie zastępuje sprawdzenia na prawdziwym sklepie.
+- Logika snippetu (zapis, walidacja, uprawnienia, wyjście hooków, podwójne załadowanie) ma test na atrapie WordPressa: `php tests/smoke-test.php`. Test nie zastępuje sprawdzenia na prawdziwym sklepie.
 - **Nie testowane:** motywy blokowe (FSE), blok Product Collection, własne szablony produktu w page builderach.
 
 ## Wymagania
@@ -33,7 +35,7 @@ Plik `woocommerce-ai-label.php` można wgrać na trzy sposoby:
 ## Bezpieczeństwo
 - wartość z formularza przechodzi przez `sanitize_text_field` i listę dozwolonych wartości,
 - zapis wymaga `current_user_can( 'edit_post' )`,
-- nonce, autosave i uprawnienia sprawdza WooCommerce przed hookiem `woocommerce_process_product_meta` (`WC_Admin_Meta_Boxes::save_meta_boxes`, nonce `woocommerce_save_data`), więc wtyczka nie dubluje tej weryfikacji,
+- nonce, autosave i uprawnienia sprawdza WooCommerce przed hookiem `woocommerce_process_product_meta` (`WC_Admin_Meta_Boxes::save_meta_boxes`, nonce `woocommerce_save_data`), więc snippet nie dubluje tej weryfikacji,
 - meta zapisywana przez obiekt produktu WooCommerce (`update_meta_data` + `save_meta_data`),
 - wyjście escapowane (`esc_html`, `wp_json_encode`).
 

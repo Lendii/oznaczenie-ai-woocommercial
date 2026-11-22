@@ -1,6 +1,6 @@
 <?php
 /**
- * Smoke test logiki wtyczki na atrapie WordPressa i WooCommerce (bez prawdziwego WP).
+ * Smoke test logiki snippetu na atrapie WordPressa i WooCommerce (bez prawdziwego WP).
  * Uruchomienie: php tests/smoke-test.php
  * Sprawdza zapis, walidację, uprawnienia, wyjście hooków i podwójne załadowanie.
  * Nie zastępuje testu na prawdziwym sklepie.
