@@ -2,7 +2,7 @@
 
 Darmowy snippet do WooCommerce, który oznacza główne zdjęcie produktu jako **AI GENERATED** albo **AI MODIFIED**. Powstał pod kątem Art. 50 AI Act.
 
-To snippet w jednym pliku, bez panelu ustawień: wgrywasz plik i działa. Nagłówek `Plugin Name` pozwala też zainstalować go jako paczkę ZIP.
+To snippet w jednym pliku, bez panelu ustawień: wgrywasz plik i działa. Dzięki nagłówkowi `Plugin Name` ten sam plik jest też poprawną wtyczką jednoplikową, więc można go zainstalować jako paczkę ZIP.
 
 To jedno z narzędzi wspierających transparentność, nie gwarancja pełnej zgodności z AI Act i nie porada prawna.
 
@@ -30,7 +30,7 @@ Strona z instrukcją wdrożenia dla właścicieli sklepów: [Darmowe oznaczenia 
 Plik `woocommerce-ai-label.php` można wgrać na trzy sposoby:
 1. FTP do `/wp-content/mu-plugins/` (bez aktywacji, widoczny w *Wtyczki → Must-Use*),
 2. jako snippet PHP we wtyczce WPCode,
-3. jako ZIP przez *Wtyczki → Dodaj nową → Wyślij wtyczkę*.
+3. jako paczka ZIP (*Wtyczki → Dodaj nową → Wyślij wtyczkę*). Paczki ZIP nie ma w repo: autorka wysyła ją bezpośrednio na prośbę (kontakt na stronie instrukcji), żeby nikt nie mógł podmienić jej zawartości.
 
 ## Bezpieczeństwo
 - wartość z formularza przechodzi przez `sanitize_text_field` i listę dozwolonych wartości,
